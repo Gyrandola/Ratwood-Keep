@@ -267,3 +267,10 @@ datum/antagonist/custom/create_team(datum/team/team)
 	else
 		return
 	..()
+
+/datum/antagonist/proc/add_objective(datum/objective/O)
+	var/datum/objective/V = new O
+	objectives += V
+
+/datum/antagonist/proc/remove_objective(datum/objective/O)
+	objectives -= O

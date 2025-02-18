@@ -1,0 +1,107 @@
+/datum/subclass/engineer
+	name = "Engineer"
+	tutorial = """
+
+	allowed_sexes = list(MALE, FEMALE)
+	allowed_races = RACES_ALL_KINDS
+	category_tags = list(CTAG_REFUGEE) 
+
+	maximum_possible_slots = 5
+
+	outfit = /datum/outfit/job/roguetown/sieger/engineer
+
+/datum/outfit/job/roguetown/sieger/engineer
+	allowed_patrons = ALL_PATRONS
+
+/datum/outfit/job/roguetown/sieger/engineer/pre_equip(mob/living/carbon/human/H)
+	..()
+	H.adjust_blindness(-3)
+	var/classes = list("", "", "", "")
+	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
+
+	switch(classchoice)
+
+		if("")
+			H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/treatment, 1, TRUE)
+			pants = /obj/item/clothing/under/roguetown/tights/black
+			shoes = /obj/item/clothing/shoes/roguetown/armor
+			gloves = /obj/item/clothing/gloves/roguetown/leather
+			belt = /obj/item/storage/belt/rogue/leather
+			neck = /obj/item/storage/belt/rogue/pouch/coins/poor
+			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+			armor = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+			head = /obj/item/clothing/head/roguetown/helmet/skullcap
+			backl = /obj/item/storage/backpack/rogue/satchel
+			backr = /obj/item/rogueweapon/shield/wood
+			beltl = /obj/item/rogueweapon/huntingknife
+			beltr = /obj/item/rogueweapon/sword/iron/messer
+			H.change_stat("strength", 2)
+			H.change_stat("endurance", 2)
+			H.change_stat("constitution", 1)
+			H.change_stat("speed", 1)
+			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+
+		if("")
+			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/treatment, 1, TRUE)
+			pants = /obj/item/clothing/under/roguetown/tights/black
+			shoes = /obj/item/clothing/shoes/roguetown/armor
+			gloves = /obj/item/clothing/gloves/roguetown/leather
+			belt = /obj/item/storage/belt/rogue/leather
+			neck = /obj/item/clothing/neck/roguetown/gorget
+			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+			armor = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+			head = /obj/item/clothing/head/roguetown/helmet/sallet/visored
+			backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
+			backr = /obj/item/rogueweapon/shield/tower
+			beltl = /obj/item/ammo_holder/quiver/bolts
+			beltr = /obj/item/storage/backpack/rogue/satchel
+			backpack_contents = list(/obj/item/rogueweapon/huntingknife = 1)
+			H.change_stat("strength", 1)
+			H.change_stat("endurance", 2)
+			H.change_stat("constitution", 1)
+			H.change_stat("speed", 1)
+			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+		
+		if("")	
+			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/misc/treatment, 1, TRUE)
+			r_hand = /obj/item/rogueweapon/spear
+			pants = /obj/item/clothing/under/roguetown/tights/black
+			shoes = /obj/item/clothing/shoes/roguetown/armor
+			gloves = /obj/item/clothing/gloves/roguetown/chain
+			belt = /obj/item/storage/belt/rogue/leather
+			neck = /obj/item/clothing/neck/roguetown/gorget
+			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
+			armor = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+			head = /obj/item/clothing/head/roguetown/helmet/bascinet
+			backl = /obj/item/storage/backpack/rogue/satchel
+			beltl = /obj/item/rogueweapon/huntingknife
+			H.change_stat("strength", 2)
+			H.change_stat("endurance", 2)
+			H.change_stat("constitution", 1)
+			H.change_stat("speed", 1)
+			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
+
+	H.set_blindness(0)

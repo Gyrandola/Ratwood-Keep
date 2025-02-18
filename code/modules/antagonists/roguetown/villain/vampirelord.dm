@@ -94,7 +94,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		equip_spawn()
 		greet()
 		if(!sired)
-			addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, spawn_pick_class), "VAMPIRE SPAWN"), 5 SECONDS)
+			addtimer(CALLBACK(owner.current, TYPE_PROC_REF(/mob/living/carbon/human, spawn_pick_class_vampire), "VAMPIRE SPAWN"), 5 SECONDS)
 	else
 		forge_vampirelord_objectives()
 		finalize_vampire()
@@ -145,7 +145,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	owner.adjust_skillrank(/datum/skill/magic/blood, 2, TRUE)
 	owner.current.ambushable = FALSE
 
-/mob/living/carbon/human/proc/spawn_pick_class()
+/mob/living/carbon/human/proc/spawn_pick_class_vampire()
 	var/list/classoptions = list("Hunter", "Miner", "Healer", "Woodcutter", "Blacksmith", "Rogue", "Magos", "Vagabond", "Scavenger")
 	var/list/visoptions = list()
 
@@ -160,7 +160,7 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 			if(!A.outfit)
 				to_chat(src, span_clown("Failed to equip chosen class, choose a new one."))
 				log_message("ERROR: Unable to pick [A.name] as a subclass for [src].", LOG_GAME)
-				spawn_pick_class()
+				spawn_pick_class_vampire()
 				return
 	
 			if(equipOutfit(A.outfit))
@@ -283,12 +283,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 		owner.current.RemoveSpell(batform)
 		QDEL_NULL(batform)
 	return ..()
-/datum/antagonist/vampirelord/proc/add_objective(datum/objective/O)
-	var/datum/objective/V = new O
-	objectives += V
-
-/datum/antagonist/vampirelord/proc/remove_objective(datum/objective/O)
-	objectives -= O
 
 /datum/antagonist/vampirelord/proc/forge_vampirelord_objectives()
 	var/list/primary = pick(list("1", "2"))
@@ -876,13 +870,6 @@ GLOBAL_LIST_EMPTY(vampire_objects)
 	to_chat(owner.current, span_userdanger("I am returned to serve. I will obey, so that I may return to rest."))
 	owner.announce_objectives()
 	..()
-
-/datum/antagonist/skeleton/knight/proc/add_objective(datum/objective/O)
-	var/datum/objective/V = new O
-	objectives += V
-
-/datum/antagonist/skeleton/knight/proc/remove_objective(datum/objective/O)
-	objectives -= O
 
 /datum/antagonist/skeleton/knight/roundend_report()
 	var/traitorwin = TRUE

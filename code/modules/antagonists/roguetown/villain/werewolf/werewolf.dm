@@ -49,12 +49,6 @@
 	owner.special_role = null
 	return ..()
 
-/datum/antagonist/werewolf/proc/add_objective(datum/objective/O)
-	objectives += O
-
-/datum/antagonist/werewolf/proc/remove_objective(datum/objective/O)
-	objectives -= O
-
 /datum/antagonist/werewolf/proc/forge_werewolf_objectives()
 	if(!(locate(/datum/objective/escape) in objectives))
 		var/datum/objective/werewolf/escape_objective = new

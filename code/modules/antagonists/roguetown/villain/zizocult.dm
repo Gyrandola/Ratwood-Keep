@@ -113,13 +113,6 @@
 	if(C.cultascended)
 		return TRUE
 
-/datum/antagonist/zizocultist/proc/add_objective(datum/objective/O)
-	var/datum/objective/V = new O
-	objectives += V
-
-/datum/antagonist/zizocultist/proc/remove_objective(datum/objective/O)
-	objectives -= O
-
 /datum/antagonist/zizocultist/roundend_report()
 	var/traitorwin = TRUE
 

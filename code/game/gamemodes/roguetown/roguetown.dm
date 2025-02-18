@@ -1,5 +1,5 @@
 // This mode will become the main basis for the typical roguetown round. Based off of chaos mode.
-var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "None", "Aspirants", "Bandits", "Maniac", "Cultists", "Lich", "CANCEL") // This is mainly used for forcemgamemodes
+var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "None", "Aspirants", "Bandits", "Maniac", "Cultists", "Lich", "Siege", "CANCEL") // This is mainly used for forcemgamemodes
 
 /datum/game_mode/chaosmode
 	name = "roguemode"
@@ -158,12 +158,18 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "N
 				if("Cultists")
 					pick_cultist()
 					log_game("Major Antagonist: Cultists")
+				if("Siege")
+					pick_siege()
+					log_game("Major Antagonist: Siege")
 				if("None")
 					log_game("Major Antagonist: None")
 		return TRUE
 
-	if(num_players() >= 64)
-		var/major_roll_highpop = pick(1,2,3)
+
+	var/pop = num_players()
+
+	if(pop >= 64)
+		var/major_roll_highpop = pick(1,2,3,4)
 		switch(major_roll_highpop)
 			if(1)
 				pick_rebels()
@@ -175,7 +181,10 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "N
 			if(3)
 				pick_lich()
 				log_game("Major Antagonist: Lich")
-	else if(num_players() >= 52)
+			if(4)
+				pick_siege()
+				log_game("Major Antagonist: Siege")
+	else if(pop >= 52)
 		var/major_roll_midpop = pick(1,2)
 		switch(major_roll_midpop)
 			if(1)
@@ -593,8 +602,34 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "N
 		GLOB.pre_setup_antags |= antag
 	restricted_jobs = list()
 
+/datum/game_mode/chaosmode/proc/pick_siege()
+	var/remaining = 3 // 1 siege leader, 2 lieutenants,
+	restricted_jobs = list("Duke", "Duke Consort", "Priest")
+	antag_candidates = get_players_for_role(ROLE_SIEGER)
+	antag_candidates = shuffle(antag_candidates)
+	for(var/datum/mind/villain in antag_candidates)
+		if(!remaining)
+			break
+		var/blockme = FALSE
+		if(!(villain in allantags))
+			blockme = TRUE
+		if(blockme)
+			return
+		allantags -= villain
+		pre_siegers += villain
+		villain.special_role = ROLE_SIEGER
+		villain.restricted_roles = restricted_jobs.Copy()
+		testing("[key_name(villain)] has been selected as the [villain.special_role]")
+		log_game("[key_name(villain)] has been selected as the [villain.special_role]")
+		antag_candidates.Remove(villain)
+		remaining -= 1
+	for(var/antag in pre_siegers)
+		GLOB.pre_setup_antags |= antag
+	restricted_jobs = list()
+
 /datum/game_mode/chaosmode/post_setup()
 	set waitfor = FALSE
+
 ///////////////// VILLAINS
 	for(var/datum/mind/traitor in pre_villains)
 		var/datum/antagonist/new_antag = new /datum/antagonist/maniac()
@@ -603,7 +638,6 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "N
 		villains += traitor
 
 ///////////////// CULTIST
-
 	pre_cultists = shuffle(pre_cultists)
 	var/cultlordpicked = FALSE
 	for(var/datum/mind/cultist in pre_cultists)
@@ -649,11 +683,29 @@ var/global/list/roguegamemodes = list("Rebellion", "Vampires and Werewolves", "N
 			addtimer(CALLBACK(vampire, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
 			GLOB.pre_setup_antags -= vampire
 			vampires += vampire
+
+///////////////// SIEGERS
+	pre_siegers = shuffle(pre_siegers)
+	var/siege_leader_picked = FALSE
+	for(var/datum/mind/sieger in pre_siegers)
+		if(!siege_leader_picked)
+			var/datum/antagonist/new_antag = new /datum/antagonist/sieger/leader()
+			addtimer(CALLBACK(sieger, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
+			GLOB.pre_setup_antags -= sieger
+			siegers += sieger
+			siege_leader_picked = TRUE
+		else
+			var/datum/antagonist/new_antag = new /datum/antagonist/sieger()
+			addtimer(CALLBACK(sieger, TYPE_PROC_REF(/datum/mind, add_antag_datum), new_antag), rand(10,100))
+			GLOB.pre_setup_antags -= sieger
+			siegers += sieger
+
 ///////////////// BANDIT
 	for(var/datum/mind/bandito in pre_bandits)
 		GLOB.pre_setup_antags -= bandito
 		bandits += bandito
 		SSrole_class_handler.bandits_in_round = TRUE
+
 ///////////////// ASPIRANTS
 	for(var/datum/mind/rogue in pre_aspirants) // Do the aspirant first, so the suppporter works right.
 		if(rogue.special_role == ROLE_ASPIRANT)

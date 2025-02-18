@@ -108,12 +108,6 @@
 		QDEL_NULL(batform)
 	return ..()
 
-/datum/antagonist/vampire/proc/add_objective(datum/objective/O)
-	objectives += O
-
-/datum/antagonist/vampire/proc/remove_objective(datum/objective/O)
-	objectives -= O
-
 /datum/antagonist/vampire/proc/forge_vampire_objectives()
 	if(!(locate(/datum/objective/escape) in objectives))
 		var/datum/objective/vampire/escape_objective = new
